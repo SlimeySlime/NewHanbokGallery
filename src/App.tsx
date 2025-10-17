@@ -5,27 +5,44 @@ import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import TopNav from './components/TopNav'
 import Footer from './components/Footer'
-import Hero from './components/Hero'
 import Home from './pages/Home'
 import Bride from './pages/Bride'
+import Gallery from './pages/Gallery'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { useGallery } from './hooks/useGallery'
 
+// QueryClient는 컴포넌트 외부에서 생성하여 재생성 방지
+const queryClient = new QueryClient()
 
 function App() {
-  const [count, setCount] = useState(0)
+	const [count, setCount] = useState(0)
 
-  return (
-    // fixed nav 사용 시 상단 오프셋(pt-16) 필요 (nav 높이 h-16)
-    <BrowserRouter>
-      <div className='flex flex-col m-auto min-h-screen justify-between pt-16'>
-        <TopNav />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/bride" element={<Bride />} />
-        </Routes>
-        <Footer />
-      </div>
-    </BrowserRouter>
-  )
- }
+	function AppContent() {
+		// 앱 최초 렌더에서 갤러리 데이터를 불러오게 함 (React Query가 캐시/중복 방지 처리)
+		useGallery()
 
- export default App
+		return (
+			<div className='flex flex-col m-auto min-h-screen justify-between'>
+				<TopNav />
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path="/gallery" element={<Gallery />} />
+					<Route path="/bride" element={<Bride />} />
+				</Routes>
+				<Footer />
+			</div>
+		)
+	}
+
+	return (
+		<QueryClientProvider client={queryClient}>
+			<BrowserRouter>
+				<div>
+					<AppContent />
+				</div>
+			</BrowserRouter>
+		</QueryClientProvider>
+	)
+}
+
+export default App
