@@ -1,4 +1,4 @@
-import React from 'react'
+// import React from 'react'
 
 export default function Hero() {
   return (
@@ -11,9 +11,11 @@ export default function Hero() {
         backgroundRepeat: 'no-repeat'
       }}
     >
-      <div className="absolute inset-0 bg-black/30"></div>
+      {/* 전체 오버레이: 화면 100% 커버 */}
+      <div className="absolute inset-0 bg-black/10 z-10"></div>
 
-      <div className="absolute inset-0 flex items-center justify-center px-4">
+      {/* main_text: 왼쪽 50%만 차지하도록 변경 */}
+      <div id='main_text' className="absolute inset-y-0 left-0 w-1/2 flex items-center justify-center px-4 z-20">
         <h1 className="text-white text-4xl md:text-6xl lg:text-7xl font-extrabold drop-shadow-lg">
           bdanbonga
         </h1>
