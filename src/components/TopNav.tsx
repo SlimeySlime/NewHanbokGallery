@@ -18,7 +18,7 @@ export default function TopNav() {
 					{/* Left: logo (left-aligned) */}
 					<div className="flex-1 flex items-center bg-slate-300/50">
 						<div className={brand}>
-							<Link to="/" className="flex items-center gap-1">
+							<Link to="/" className="flex items-center gap-2">
 								<BdanbongaLogo className="w-8 h-8 fill-white"/>
 								<span className="font-semibold ml-2">비단본가</span>
 							</Link>
