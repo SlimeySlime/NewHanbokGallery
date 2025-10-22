@@ -77,11 +77,11 @@ export default function Gallery() {
 				<table className="w-full text-left border-collapse">
 					<thead>
 						<tr className="border-b">
-							<th className="py-2">ID</th>
-							<th className="py-2">날짜</th>
-							<th className="py-2">구분</th>
-							<th className="py-2">고객유형/코드</th>
-							<th className="py-2">코드/바코드</th>
+							<th className="py-2">유형</th>
+							<th className="py-2">코드</th>
+							<th className="py-2">이름</th>
+							<th className="py-2">타입</th>
+							<th className="py-2">사이즈</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -89,11 +89,11 @@ export default function Gallery() {
 							const key = item.id ?? `row-${idx}`
 							return (
 								<tr key={String(key)} className="odd:bg-white/5">
-									<td className="py-2 align-top">{item.id ?? '-'}</td>
-									<td className="py-2 align-top">{item.date ?? '-'}</td>
-									<td className="py-2 align-top">{item.gubun ?? '-'}</td>
 									<td className="py-2 align-top">{item.customer_type ?? '-'}</td>
 									<td className="py-2 align-top">{item.display_code ?? '-'}</td>
+									<td className="py-2 align-top">{item.hanbok_name1 ?? '-'}</td>
+									<td className="py-2 align-top">{item.hanbok_type1 ?? '-'}</td>
+									<td className="py-2 align-top">{item.available_size ?? '-'}</td>
 								</tr>
 							)
 						})}

@@ -1,9 +1,9 @@
 export interface GalleryItem {
-  id: number | string;
+  // id: number | string;
   date: string;
-  gubun: string | null;
-  customer_type: string | null;
-  display_code: string | null;
+  // gubun: string | null;
+  customer_type: string | null; // e.g '신부'
+  display_code: string | null;  // e.g A220
   views: number;
   unavailable: boolean;
   hanbok_name1: string;
