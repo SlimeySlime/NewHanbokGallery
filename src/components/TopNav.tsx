@@ -1,14 +1,34 @@
-import React from 'react'
+import React, { useState } from 'react'
 import BdanbongaLogo from '../assets/bdanbonga.svg?react'
 import { Link } from 'react-router-dom'
+import { useEventDate } from '../context/EventDateContext'
+import { parseDateString, addDays, formatDateToSQL } from '../utils/dateUtils'
 
 export default function TopNav() {
-	// 오늘 날짜(YYYY-MM-DD) — date input의 초기값으로 사용
-	const today = new Date().toISOString().slice(0, 10)
+	const { setRentalDates } = useEventDate()
+	const [eventDate, setEventDate] = useState('')
 
-	// Tailwind 클래스 묶음(짧은 식별자 사용)
-	const brand = "flex items-center"
-	// center 영역은 md에서 전체 메뉴를 보여주고, 모바일에서는 단일 링크만 노출
+	const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const newDate = e.target.value
+		setEventDate(newDate)
+		// 선택된 날짜가 있으면 파싱 -> -5일/+8일 -> YYYYMMDD 포맷으로 설정
+		if (newDate) {
+			const selected = parseDateString(newDate)
+			const start = addDays(selected, -5)
+			const end = addDays(selected, 8)
+			const rentalStart = formatDateToSQL(start)
+			const rentalEnd = formatDateToSQL(end)
+			console.log('start/end set to:', rentalStart, rentalEnd)
+			setRentalDates(rentalStart, rentalEnd)
+		} else {
+			setRentalDates(null, null)
+		}
+	}
+
+	const handleClearFilter = () => {
+		setEventDate('')
+		setRentalDates(null, null)
+	}
 
 	return (
 		<nav className="fixed w-full top-0 bg-teal-800/60 backdrop-blur-sm border-b-2 border-b-teal-900 text-white z-50">
@@ -16,8 +36,8 @@ export default function TopNav() {
         {/* 3-column layout: each column uses flex-1 so center stays centered */}
 				<div className="flex w-full h-16 justify-between items-center?">
 					{/* Left: logo (left-aligned) */}
-					<div className="flex-1 flex items-center bg-slate-300/30">
-						<div className={brand}>
+					<div className="flex-1 flex items-center ">
+						<div className=''>
 							<Link to="/" className="flex items-center gap-2">
 								<BdanbongaLogo className="w-8 h-8 fill-white"/>
 								<span className="font-semibold ml-2">비단본가</span>
@@ -39,14 +59,22 @@ export default function TopNav() {
 						{/* 날짜 선택: md 이상에서 표시 */}
 						<div className="hidden md:flex items-center text-sm p-4">
 							{/* 라벨이 줄어들지 않도록 flex-shrink-0와 공백 유지 */}
-							<label htmlFor="event-date" className="flex-shrink-0 whitespace-nowrap">행사날짜</label>
+							<label htmlFor="event-date" className="flex-shrink-0 whitespace-nowrap mr-2">행사날짜</label>
 							<input
 								id="event-date"
 								type="date"
-								defaultValue={today}
+								value={eventDate}
+								onChange={handleDateChange}
 								className="bg-white/10 text-white rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400 transition-colors duration-150"
 								aria-label="행사 날짜 선택"
 							/>
+							<button
+								onClick={handleClearFilter}
+								className="ml-2 px-2 py-1 bg-gray-600 text-white rounded text-xs hover:bg-gray-700"
+								aria-label="날짜 필터 초기화"
+							>
+								초기화
+							</button>
 						</div>
 						<form
 							className="hidden search md:flex items-center bg-white/10 hover:bg-white/20 rounded-md px-2 py-1 transition-colors duration-150 ease-in-out"
