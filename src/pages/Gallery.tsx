@@ -1,6 +1,6 @@
 import React from 'react'
 import { useFilteredGallery } from '../hooks/useFilteredGallery'
-import { useEventDate } from '../context/EventDateContext'
+import { useEventDate } from '../hooks/useEventDate'
 import type { GalleryItem } from '../domain/gallery_item'
 
 export default function Gallery() {
