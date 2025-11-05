@@ -1,5 +1,4 @@
 import React from 'react'
-import { useGallery } from '../hooks/useGallery'
 import { useFilteredGallery } from '../hooks/useFilteredGallery'
 import { useEventDate } from '../context/EventDateContext'
 import type { GalleryItem } from '../domain/gallery_item'
@@ -8,30 +7,14 @@ export default function Gallery() {
 	const { rentalStart, rentalEnd } = useEventDate()
 	const isFiltered = !!rentalStart && !!rentalEnd
 
-	// const {
-	// 	data: generalData,
-	// 	isLoading: generalIsLoading,
-	// 	isError: generalIsError,
-	// 	error: generalError,
-	// 	refetch: generalRefetch,
-	// 	isFetching: generalIsFetching,
-	// } = useGallery(!isFiltered) // 필터링되지 않았을 때만 활성화
-
 	const {
-		data: filteredData,
-		isLoading: filteredIsLoading,
-		isError: filteredIsError,
-		error: filteredError,
-		refetch: filteredRefetch,
-		isFetching: filteredIsFetching,
+		data: items,
+		isLoading,
+		isError,
+		error,
+		refetch,
+		isFetching,
 	} = useFilteredGallery({ rentalStart, rentalEnd })
-
-	const data = filteredData
-	const isLoading = filteredIsLoading
-	const isError = filteredIsError
-	const error = filteredError
-	const refetch = filteredRefetch
-	const isFetching = filteredIsFetching
 
 	if (isLoading) {
 		return (
@@ -58,9 +41,6 @@ export default function Gallery() {
 		)
 	}
 
-	// GalleryItem 단일 타입으로 처리
-	const items: GalleryItem[] = (data as GalleryItem[] | undefined) || []
-
 	return (
 		<div className="px-6 pb-6">
 			<h2 className="text-2xl font-semibold mb-4">갤러리 디버그 페이지</h2>
@@ -71,7 +51,7 @@ export default function Gallery() {
 			)}
 			{isFetching && !isLoading && <p className="text-sm text-gray-400 mb-2">업데이트 중...</p>}
 
-			{!items || items.length === 0 ? (
+			{!items.length ? (
 				<p>항목이 없습니다.</p>
 			) : (
 				<table className="w-full text-left border-collapse">
@@ -86,7 +66,7 @@ export default function Gallery() {
 					</thead>
 					<tbody>
 						{items.map((item, idx) => {
-							const key = item.id ?? `row-${idx}`
+							const key = `row-${idx}`
 							return (
 								<tr key={String(key)} className="odd:bg-white/5">
 									<td className="py-2 align-top">{item.customer_type ?? '-'}</td>

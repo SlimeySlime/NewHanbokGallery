@@ -27,12 +27,18 @@ async function fetchFilteredGallery({ rentalStart, rentalEnd }: FilteredGalleryP
 export function useFilteredGallery(params: FilteredGalleryParams) {
   const { rentalStart, rentalEnd } = params;
 
-  return useQuery<GalleryItem[], Error>({
+  const query = useQuery<GalleryItem[], Error>({
     queryKey: ['gallery', 'filtered', rentalStart, rentalEnd],
     queryFn: () => fetchFilteredGallery({ rentalStart, rentalEnd }),
-    enabled: !!rentalStart && !!rentalEnd, // 두 날짜가 모두 있을 때만 쿼리 실행
+    enabled: !!rentalStart && !!rentalEnd,
+    select: (data) => data || [], // 여기서 undefined 처리
     staleTime: 1000 * 60 * 5, // 5분
     refetchOnWindowFocus: false,
     retry: 1,
   });
+
+  return {
+    ...query,
+    data: query.data ?? [],
+  };
 }
