@@ -1,8 +1,6 @@
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
-import TopNav from './components/TopNav';
-import Footer from './components/Footer';
 import Home from './pages/Home';
 import Gallery from './pages/Gallery';
+import Search from './pages/Search';
 
 const AppLayout = () => (
   <div className="flex flex-col m-auto min-h-screen justify-between">
@@ -20,11 +18,12 @@ export default function Router() {
       <Routes>
         <Route path="/" element={<AppLayout />}>
           <Route index element={<Home />} />
-          <Route path="gallery" element={<Gallery customer_type="전체"/>} />
+          <Route path="gallery" element={<Gallery />} />
           <Route path="bride" element={<Gallery customer_type="신부" />} />
           <Route path="groom" element={<Gallery customer_type="신랑" />} />
           <Route path="guest" element={<Gallery customer_type="하객" />} />
-          <Route path="parent" element={<Gallery customer_type="혼주" />} />
+          <Route path="family" element={<Gallery customer_type="혼주" />} />
+          <Route path="search" element={<Search />} />
         </Route>
       </Routes>
     </BrowserRouter>
