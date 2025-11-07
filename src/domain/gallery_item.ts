@@ -1,9 +1,13 @@
+export type CustomerType = '전체' | '신부' | '신랑' | '혼주' | '하객';
+
+export const CUSTOMER_TYPES: CustomerType[] = ['전체', '신부', '신랑', '혼주', '하객'];
+
 export interface GalleryItem {
   // id: number | string;
   date: string;
   // gubun: string | null;
-  customer_type: string | null; // e.g '신부'
-  display_code: string | null;  // e.g A220
+  customer_type: string; // e.g '신부, 혼주'
+  display_code: string; // e.g A220
   views: number;
   unavailable: boolean;
   hanbok_name1: string;

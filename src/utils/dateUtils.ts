@@ -1,29 +1,41 @@
-export function parseDateString(dateStr: string): Date {
-	// 'YYYY-MM-DD' -> Date (midnight)
-	return new Date(dateStr + 'T00:00:00')
+/**
+ * Date 객체를 'YYYY-MM-DD' 형식의 문자열로 변환합니다. (input[type="date"]용)
+ * @param date 변환할 Date 객체
+ * @returns 'YYYY-MM-DD' 형식의 문자열
+ */
+export function formatDateToInput(date: Date): string {
+	return date.toISOString().split('T')[0]
 }
 
-export function formatDateToISODateString(date: Date): string {
-	// Date -> 'YYYY-MM-DD'
-	return date.toISOString().slice(0, 10)
+/**
+ * 'YYYY-MM-DD' 형식의 문자열을 Date 객체로 파싱합니다.
+ * @param dateString 'YYYY-MM-DD' 형식의 문자열
+ * @returns Date 객체
+ */
+export function parseDateString(dateString: string): Date {
+	return new Date(dateString)
 }
 
+/**
+ * 주어진 날짜에 특정 일수를 더하거나 뺍니다.
+ * @param date 기준 Date 객체
+ * @param daysToAdd 더하거나 뺄 일수 (음수 가능)
+ * @returns 계산된 새로운 Date 객체
+ */
+export function addDays(date: Date, daysToAdd: number): Date {
+	const newDate = new Date(date)
+	newDate.setDate(date.getDate() + daysToAdd)
+	return newDate
+}
+
+/**
+ * Date 객체를 'YYYYMMDD' 형식의 SQL용 문자열로 변환합니다.
+ * @param date 변환할 Date 객체
+ * @returns 'YYYYMMDD' 형식의 문자열
+ */
 export function formatDateToSQL(date: Date): string {
-	// Date -> 'YYYYMMDD'
-	const y = date.getFullYear()
-	const m = String(date.getMonth() + 1).padStart(2, '0')
-	const d = String(date.getDate()).padStart(2, '0')
-	return `${y}${m}${d}`
-}
-
-export function sqlToDateString(sql: string): string {
-	// 'YYYYMMDD' -> 'YYYY-MM-DD'
-	if (!sql || sql.length !== 8) return sql
-	return `${sql.slice(0, 4)}-${sql.slice(4, 6)}-${sql.slice(6, 8)}`
-}
-
-export function addDays(date: Date, days: number): Date {
-	const d = new Date(date)
-	d.setDate(d.getDate() + days)
-	return d
+	const year = date.getFullYear()
+	const month = String(date.getMonth() + 1).padStart(2, '0')
+	const day = String(date.getDate()).padStart(2, '0')
+	return `${year}${month}${day}`
 }
