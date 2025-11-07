@@ -1,31 +1,39 @@
 import React from 'react'
-import { useFilteredGallery } from '../hooks/useFilteredGallery'
-import { useEventDate } from '../hooks/useEventDate'
-import type { GalleryItem } from '../domain/gallery_item'
+import { useAppSelector } from '../store/hooks'
+import { useGetFilteredGalleryQuery } from '../store/api/galleryApi'
+import GallerySkeleton from '../components/GallerySkeleton'
 
 export default function Gallery() {
-	const { rentalStart, rentalEnd } = useEventDate()
+	const { rentalStart, rentalEnd } = useAppSelector(state => state.eventDate)
 	const isFiltered = !!rentalStart && !!rentalEnd
 
 	const {
-		data: items,
+		data: items = [], // 데이터가 아직 없을 때를 대비해 기본값으로 빈 배열을 설정
 		isLoading,
 		isError,
 		error,
 		refetch,
 		isFetching,
-	} = useFilteredGallery({ rentalStart, rentalEnd })
+	} = useGetFilteredGalleryQuery(
+		{ rentalStart, rentalEnd },
+		// rentalStart 또는 rentalEnd 값이 없으면 쿼리를 실행하지 않음 (skip)
+		{ skip: !isFiltered },
+	)
 
 	if (isLoading) {
 		return (
-			<main className="p-6">
-				<p>로딩 중...</p>
-			</main>
+			<div className="px-6 pb-6">
+				<h2 className="text-2xl font-semibold mb-4">갤러리</h2>
+				<GallerySkeleton />
+			</div>
 		)
 	}
 
 	if (isError) {
-		const errorMessage = error instanceof Error ? error.message : String(error ?? '알 수 없는 오류')
+		// RTK Query의 에러 객체는 구조가 다를 수 있으므로 더 안전하게 처리
+		const errorMessage =
+			(error && typeof error === 'object' && 'error' in error ? String(error.error) : String(error)) ||
+			'알 수 없는 오류'
 		return (
 			<main className="p-6">
 				<p>데이터 로드 중 오류가 발생했습니다.</p>
@@ -42,8 +50,8 @@ export default function Gallery() {
 	}
 
 	return (
-		<div className="px-6 pb-6">
-			<h2 className="text-2xl font-semibold mb-4">갤러리 디버그 페이지</h2>
+		<div className="p-6">
+			<h2 className="text-2xl font-semibold mb-4">갤러리</h2>
 			{isFiltered && (
 				<p className="mb-4 text-gray-600">
 					행사 날짜: {rentalStart} ~ {rentalEnd} (필터링됨)
@@ -52,33 +60,67 @@ export default function Gallery() {
 			{isFetching && !isLoading && <p className="text-sm text-gray-400 mb-2">업데이트 중...</p>}
 
 			{!items.length ? (
-				<p>항목이 없습니다.</p>
+				<div className="text-center py-12">
+					<p className="text-gray-500">
+						{isFiltered ? '해당 날짜에 대여 가능한 상품이 없습니다.' : '먼저 행사 날짜를 선택해주세요.'}
+					</p>
+				</div>
 			) : (
-				<table className="w-full text-left border-collapse">
-					<thead>
-						<tr className="border-b">
-							<th className="py-2">유형</th>
-							<th className="py-2">코드</th>
-							<th className="py-2">이름</th>
-							<th className="py-2">타입</th>
-							<th className="py-2">사이즈</th>
-						</tr>
-					</thead>
-					<tbody>
-						{items.map((item, idx) => {
-							const key = `row-${idx}`
-							return (
-								<tr key={String(key)} className="odd:bg-white/5">
-									<td className="py-2 align-top">{item.customer_type ?? '-'}</td>
-									<td className="py-2 align-top">{item.display_code ?? '-'}</td>
-									<td className="py-2 align-top">{item.hanbok_name1 ?? '-'}</td>
-									<td className="py-2 align-top">{item.hanbok_type1 ?? '-'}</td>
-									<td className="py-2 align-top">{item.available_size ?? '-'}</td>
-								</tr>
-							)
-						})}
-					</tbody>
-				</table>
+				<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-x-6 gap-y-8">
+					{items.map(item => {
+						const imageUrl = item.display_code
+							? `https://storage.googleapis.com/hanbok.bdanbonga.com/Store/[${item.display_code}]/1.jpg`
+							: null
+
+						// const nameParts = [item.hanbok_name1, item.hanbok_name2, item.hanbok_name3].filter(Boolean)
+						// const mainName = nameParts.join(' ')
+
+						return (
+							<div key={item.display_code} className="group">
+								{/* Image container with relative positioning for the overlay */}
+								<div className="relative w-full cursor-pointer">
+									{/* 한복 이미지 카드 */}
+									{imageUrl && (
+										<img
+											src={imageUrl}
+											alt={item.display_code || ''}
+											className="aspect-auto w-full object-cover rounded-md 
+												transition-opacity bg-gray-100 group-hover:opacity-90"
+										/>
+									)}
+
+									{/* Unavailable Overlay */}
+									{item.unavailable && (
+										<div className="absolute inset-0 bg-black/60 rounded-md flex items-center justify-center p-4 text-center">
+											<p className="text-white text-sm font-medium">
+												이 상품은 해당 날짜에 대여가 어렵습니다
+											</p>
+										</div>
+									)}
+								</div>
+
+								{/* Product Info */}
+								<div className="mt-2">
+									<div className="flex flex-col items-start justify-between text-sm">
+										{item.display_code && (
+											<span className="text-gray-400 font-mono">{item.display_code}</span>
+										)}
+										{item.customer_type && (
+											<span className="inline-block bg-gray-100 text-blackd px-2 py-1 rounded-full">
+												{item.customer_type}
+											</span>
+										)}
+									</div>
+									
+									<h3 className="mt-2 text-sm font-semibold text-gray-800 truncate group-hover:text-teal-600">
+										{item.hanbok_name1}
+									</h3>
+									
+								</div>
+							</div>
+						)
+					})}
+				</div>
 			)}
 		</div>
 	)

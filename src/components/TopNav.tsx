@@ -1,17 +1,19 @@
 import React from 'react'
 import BdanbongaLogo from '../assets/bdanbonga.svg?react'
 import { Link } from 'react-router-dom'
-import { useEventDate } from '../hooks/useEventDate'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { setEventDate } from '../store/slices/eventDateSlice'
 
 export default function TopNav() {
-	const { eventDate, setEventDate } = useEventDate()
+	const dispatch = useAppDispatch()
+	const eventDate = useAppSelector(state => state.eventDate.eventDate)
 
 	const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setEventDate(e.target.value)
+		dispatch(setEventDate(e.target.value))
 	}
 
 	const handleClearFilter = () => {
-		setEventDate('')
+		dispatch(setEventDate(''))
 	}
 
 	return (
