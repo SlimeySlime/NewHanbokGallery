@@ -9,6 +9,10 @@
 - [x] `useGallery` 훅이 `enabled` 옵션을 받도록 수정하고 API 엔드포인트 오류 수정
 - [x] `domain` 폴더에 `GalleryItem` 타입 정의 추가
 
+
+- app.css, index.css 모두 컴포넌트 tsx파일에 tailwind로 적용 
+
+
 # 사용자 메모
 - unavailable 이 django 서버에서 계산되므로,
     gallery/filter/?reatalStart&reantalEnd 에서 받는 타입도 GalleryItem 임

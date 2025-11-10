@@ -2,11 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetGalleryItemByDisplayCodeQuery } from '../store/api/galleryApi';
 
+// Import Swiper React components
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import 'swiper/css/navigation';
+import 'swiper/css/thumbs';
+
+// import required modules
+import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
+
 const Display: React.FC = () => {
   const { displayCode } = useParams<{ displayCode: string }>();
   const { data: item, error, isLoading } = useGetGalleryItemByDisplayCodeQuery(displayCode!);
 
-  const [mainImage, setMainImage] = useState<string | null>(null);
+  const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
   const [validImageUrls, setValidImageUrls] = useState<string[]>([]);
 
   useEffect(() => {
@@ -31,9 +43,6 @@ const Display: React.FC = () => {
           .filter(result => result.status === 'fulfilled')
           .map(result => (result as PromiseFulfilledResult<string>).value);
         setValidImageUrls(loadedUrls);
-        if (loadedUrls.length > 0) {
-          setMainImage(loadedUrls[0]);
-        }
       });
     }
   }, [item]);
@@ -50,35 +59,51 @@ const Display: React.FC = () => {
     return <div>Item not found.</div>;
   }
 
-  const handleThumbnailClick = (url: string) => {
-    setMainImage(url);
-  };
-
   return (
     <div className="container mx-auto p-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
         {/* Image Gallery */}
         <div>
-          <div className="mb-4">
-            {mainImage && (
-              <img
-                src={mainImage}
-                alt={item.display_code}
-                className="w-full object-cover rounded-lg shadow-lg"
-              />
-            )}
-          </div>
-          <div className="grid grid-cols-5 gap-2">
+          {/* Main Swiper */}
+          <Swiper
+            spaceBetween={10}
+            navigation={true}
+            thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
+            modules={[FreeMode, Navigation, Thumbs]}
+            className="mySwiper2 mb-4"
+          >
             {validImageUrls.map((url, index) => (
-              <img
-                key={index}
-                src={url}
-                alt={`${item.display_code} thumbnail ${index + 1}`}
-                className="w-full object-cover rounded-md cursor-pointer hover:opacity-75"
-                onClick={() => handleThumbnailClick(url)}
-              />
+              <SwiperSlide key={index}>
+                <img
+                  src={url}
+                  alt={`${item.display_code} main ${index + 1}`}
+                  className="w-full h-full object-contain rounded-lg shadow-lg"
+                />
+              </SwiperSlide>
             ))}
-          </div>
+          </Swiper>
+
+          {/* Thumbs Swiper */}
+          <Swiper
+            onSwiper={setThumbsSwiper}
+            spaceBetween={10}
+            slidesPerView={4}
+            freeMode={true}
+            watchSlidesProgress={true}
+            modules={[FreeMode, Navigation, Thumbs]}
+            className="mySwiper"
+          >
+            {validImageUrls.map((url, index) => (
+              <SwiperSlide key={index}>
+                <img
+                  src={url}
+                  alt={`${item.display_code} thumbnail ${index + 1}`}
+                  className="w-full h-full object-cover rounded-md cursor-pointer hover:opacity-75"
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
 
         {/* Item Details */}
