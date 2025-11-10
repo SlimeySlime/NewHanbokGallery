@@ -1,4 +1,5 @@
 // import React from 'react';
+import { Link } from 'react-router-dom';
 import { type GalleryItem } from '../domain/gallery_item';
 
 interface GalleryGridProps {
@@ -12,8 +13,11 @@ export default function GalleryGrid({ items }: GalleryGridProps) {
         const imageUrl = `https://storage.googleapis.com/hanbok.bdanbonga.com/Store/[${item.display_code}]/1.jpg`;
 
         return (
-          <div key={item.display_code} 
-            className="p-4 group cursor-pointer transition-shadow hover:shadow-lg rounded-md">
+          <Link
+            to={`/display/${item.display_code}`}
+            key={item.display_code}
+            className="p-4 group cursor-pointer transition-shadow hover:shadow-lg rounded-md"
+          >
             <div className="relative w-full">
               {imageUrl && (
                 <img
@@ -25,8 +29,10 @@ export default function GalleryGrid({ items }: GalleryGridProps) {
               )}
 
               {item.unavailable && (
-                <div className="absolute inset-0 cursor-not-allowed 
-                  bg-black/60 rounded-md flex items-center justify-center p-4 text-center">
+                <div
+                  className="absolute inset-0 cursor-not-allowed 
+                  bg-black/60 rounded-md flex items-center justify-center p-4 text-center"
+                >
                   <p className="text-white text-sm font-medium">
                     이 상품은 해당 날짜에 대여가 어렵습니다
                   </p>
@@ -51,7 +57,7 @@ export default function GalleryGrid({ items }: GalleryGridProps) {
                 {item.hanbok_name3}
               </span>
             </div>
-          </div>
+          </Link>
         );
       })}
     </div>

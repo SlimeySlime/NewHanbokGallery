@@ -21,7 +21,14 @@ export const galleryApi = createApi({
     getAllGalleryItems: builder.query<GalleryItem[], void>({
       query: () => 'filter/',
     }),
+    getGalleryItemByDisplayCode: builder.query<GalleryItem, string>({
+      query: displayCode => `${displayCode}`,
+    }),
   }),
 });
 
-export const { useGetFilteredGalleryQuery, useGetAllGalleryItemsQuery } = galleryApi;
+export const {
+  useGetFilteredGalleryQuery,
+  useGetAllGalleryItemsQuery,
+  useGetGalleryItemByDisplayCodeQuery,
+} = galleryApi;
