@@ -1,5 +1,5 @@
-import React from 'react';
-import { GalleryItem } from '../domain/gallery_item';
+// import React from 'react';
+import { type GalleryItem } from '../domain/gallery_item';
 
 interface GalleryGridProps {
   items: GalleryItem[];
@@ -12,7 +12,8 @@ export default function GalleryGrid({ items }: GalleryGridProps) {
         const imageUrl = `https://storage.googleapis.com/hanbok.bdanbonga.com/Store/[${item.display_code}]/1.jpg`;
 
         return (
-          <div key={item.display_code} className="group cursor-pointer transition-shadow hover:shadow-lg rounded-md">
+          <div key={item.display_code} 
+            className="p-4 group cursor-pointer transition-shadow hover:shadow-lg rounded-md">
             <div className="relative w-full">
               {imageUrl && (
                 <img

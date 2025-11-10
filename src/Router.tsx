@@ -1,6 +1,9 @@
 import Home from './pages/Home';
 import Gallery from './pages/Gallery';
 import Search from './pages/Search';
+import TopNav from './components/TopNav';
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
+import Footer from './components/Footer';
 
 const AppLayout = () => (
   <div className="flex flex-col m-auto min-h-screen justify-between">
@@ -22,7 +25,7 @@ export default function Router() {
           <Route path="bride" element={<Gallery customer_type="신부" />} />
           <Route path="groom" element={<Gallery customer_type="신랑" />} />
           <Route path="guest" element={<Gallery customer_type="하객" />} />
-          <Route path="family" element={<Gallery customer_type="혼주" />} />
+          <Route path="parent" element={<Gallery customer_type="혼주" />} />
           <Route path="search" element={<Search />} />
         </Route>
       </Routes>

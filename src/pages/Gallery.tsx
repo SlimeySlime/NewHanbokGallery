@@ -2,7 +2,7 @@ import React from 'react';
 import { useAppSelector } from '../store/hooks';
 import { useGetFilteredGalleryQuery } from '../store/api/galleryApi';
 import GallerySkeleton from '../components/GallerySkeleton';
-import { CustomerType } from '../domain/gallery_item';
+import { type CustomerType } from '../domain/gallery_item';
 import GalleryGrid from '../components/GalleryGrid';
 
 interface GalleryProps {
