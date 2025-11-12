@@ -46,11 +46,8 @@ export default function Home() {
       map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
 
       setMapLoaded(true)
-      console.log('kakao api and map loaded successfully')
-
     } else {
       setMapLoaded(false)
-      console.log('kakao api is null')
       console.log(kakao)
     }
 
@@ -60,16 +57,12 @@ export default function Home() {
 
   return (
     <main>
-      <Hero />
-      {/* <div className='carousel-container'>
-            <div className='carousel-item'>dd</div>
-            <div className='carousel-item'>dd</div>
-            <div className='carousel-item'>dd</div>
-            <div className='carousel-item'>dd</div>
-        </div> */}
+      <div className=''>
+        <Hero />
+
+      </div>
+      
       <div className="p-6">
-
-
         <div className="container justify-center w-auto mx-24 my-8 mobile:m-4">
           here is swiper
           <Swiper

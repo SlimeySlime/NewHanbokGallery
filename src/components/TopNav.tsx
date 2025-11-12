@@ -25,11 +25,6 @@ export default function TopNav() {
     }
   };
 
-  const handleClearFilter = () => {
-    dispatch(setEventDate(''));
-    setCookie('eventDate', '', -1); // 쿠키 삭제
-  };
-
   return (
     <nav className="fixed w-full top-0 bg-teal-800/60 backdrop-blur-sm border-b-2 border-b-teal-900 text-white z-50">
       <div className="flex mx-4 h-16 w-full">
