@@ -18,7 +18,10 @@ export default {
       },
       fontFamily: {
         sans: ['Pretendard', 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif'],
-        pretendard: ['Pretendard', 'sans-serif'],
+        'pretendard': ['Pretendard', 'sans-serif'],
+        wild: ['Wild', 'sans-serif'],
+        dimibang: ['dimibang', 'sans-serif'],
+
       },
     },
   },

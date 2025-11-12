@@ -125,7 +125,7 @@ const Display: React.FC = () => {
         </div>
 
         {/* 한복 상세 설명 */}
-        <div id='item-details' className="flex flex-col text-start">
+        <div id='item-details' className="flex flex-col text-start font-">
           <div className="m-4 mb-12 w-auto">
             <div className="mb-12 p-4">
               <p className="pt-4 text-2xl border-b-2 pb-4">[{item.display_code}] {item.hanbok_name1}</p>
@@ -137,7 +137,7 @@ const Display: React.FC = () => {
               }
               <p className="pt-4 text-2xl">사이즈: {getDisplaySizes(item.available_size)}</p>
             </div>
-            <div>
+            <div className="font-sans">
               <p className="flex mb-4 font-semibold text-lg">👩 저고리와 치마를 종류별로 다르게 선택해서 결정하실수도 있습니다. <br/>예 ) A008 저고리, A029 치마</p>
               <p className="flex mb-4 font-semibold text-lg">🧵 정확하게 맞는 치수가 아니더라도 <br/>고객님의 키, 가슴둘레, 화장길이에 맞춰서 수선해드릴 수 있습니다.</p>
             </div>
