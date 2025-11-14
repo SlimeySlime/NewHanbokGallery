@@ -24,7 +24,7 @@ export default function Hero() {
 			<div className="absolute inset-0 bg-black/10 z-10"></div>
 
 			{/* main_text: 왼쪽 50%만 차지하도록 변경 */}
-			<div id='main_text' className="absolute inset-y-0 left-0 w-1/2 flex items-center justify-center px-4 z-20">
+			<div id='main_text' className="absolute inset-y-0 left-0 w-full md:w-1/2 flex items-center justify-center px-4 z-20">
 				<div className="flex flex-col justify-center items-center m-12 mobile:m-2">
 					<img id="logo" src={bdanbonga_logo} alt="" />
 					
