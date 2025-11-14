@@ -37,48 +37,31 @@ export default function TopNav() {
   return (
     <>
       <nav className="fixed w-full top-0 bg-teal-800/60 backdrop-blur-sm border-b-2 border-b-teal-900 text-white z-50">
-        <div className="flex mx-4 h-16 w-full">
-          {/* 3-column layout: each column uses flex-1 so center stays centered */}
+        <div className="mx-auto px-4">
+          <div className="flex flex-col md:flex-row md:h-16">
 
-          <div className="flex w-full h-16 justify-between items-center">
-
-            <div className="flex flex-1 items-center 
-            bg-blue-500/20">
-              <div className="">
-                <Link to="/" className="flex items-center m-2">
-                  <BdanbongaLogo className="w-8 h-8 fill-white m-2" />
+            {/* Top Row (Mobile) / Left Section (Desktop) */}
+            <div className="flex justify-between items-center h-16">
+              <div className="shrink-0 flex items-center">
+                <Link to="/" className="flex items-center">
+                  <BdanbongaLogo className="w-8 h-8 fill-white mr-2" />
                   <span className="font-semibold text-3xl text-nowrap font-dimibang">비단본가</span>
                 </Link>
               </div>
+              {/* 모바일 메뉴 버튼 */}
+              <div className="md:hidden">
+                <button onClick={toggleMobileMenu} aria-label="menu" 
+                  className="rounded-md text-black">
+                  ☰
+                </button>
+              </div>
             </div>
 
-            <div className="hidden md:flex flex-1 justify-center items-center font-semibold gap-2
-            bg-red-200/50">
-              {/* 모바일에서는 단일 링크만 보이고, md 이상에서는 전체 메뉴를 보임 */}
-              <Link to="/gallery" className="over:opacity-90 text-nowrap">
-                전체보기
-              </Link>
-              <Link to="/bride" className="over:opacity-90 text-nowrap">
-                신부한복
-              </Link>
-              <Link to="/groom" className="hover:opacity-90 text-nowrap">
-                신랑한복
-              </Link>
-              <Link to="/guest" className="hover:opacity-90 text-nowrap">
-                하객한복
-              </Link>
-              <Link to="/parent" className="hover:opacity-90 text-nowrap">
-                혼주한복
-              </Link>
-            </div>
 
-            {/* Right: 행사날짜(데스크탑), 검색폼, 모바일 메뉴 (right-aligned) */}
-            <div className="flex flex-1 justify-end items-center pr-12 font-semibold
-                        bg-blue-500/50">
-              {/* 날짜 선택: md 이상에서 표시 */}
-              <div className="hidden md:flex items-center text-sm p-4">
-                {/* 라벨이 줄어들지 않도록 flex-shrink-0와 공백 유지 */}
-                <label htmlFor="event-date" className="flex-1 whitespace-nowrap mr-2">
+            <div className="flex items-center justify-end py-2 md:py-0">
+              {/* Event Date Picker */}
+              <div className="flex items-center text-sm">
+                <label htmlFor="event-date" className="whitespace-nowrap mr-2">
                   행사날짜
                 </label>
                 <input
@@ -86,55 +69,65 @@ export default function TopNav() {
                   type="date"
                   value={eventDate}
                   onChange={handleDateChange}
-                  className="bg-white/90 text-black font-bold rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400 transition-colors duration-150"
+                  className="bg-white/90 text-black font-bold rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
                   aria-label="행사 날짜 선택"
                 />
               </div>
+              
+              
               <form
-                className="hidden search rounded-md px-2 py-1 md:flex items-center 
-                bg-white/10 hover:bg-white/20  
-                transition-colors duration-150 ease-in-out"
-                role="search"
-                id="search"
+                className="hidden md:flex items-center ml-4 bg-white/10 hover:bg-white/20 rounded-md px-2 py-1"
                 onSubmit={handleSearchSubmit}
               >
-                <i className="bi bi-search text-white mr-2" aria-hidden="true">
-                  🔍
-                </i>
+                <i className="bi bi-search text-white mr-2">🔍</i>
                 <input
-                  className="form-control bg-transparent placeholder-white/90 text-white text-sm w-24 md:w-48 focus:outline-none"
-                  id="search-query"
+                  className="bg-transparent placeholder-white/90 text-white text-sm w-32 focus:outline-none"
                   type="search"
                   placeholder="검색"
-                  autoComplete="off"
-                  aria-label="검색"
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
                 />
               </form>
-
-              {/* 모바일 메뉴 버튼 */}
-              <div className="md:hidden">
-                <button onClick={toggleMobileMenu} aria-label="menu" className="p-2 rounded-md text-white">
-                  ☰
-                </button>
-              </div>
             </div>
+            <div className="flex items-center overflow-x-auto whitespace-nowrap 
+              md:flex md:justify-evenly md:flex-1 md:gap-2 py-2 md:py-0 no-scrollbar">
+              <Link to="/gallery" className="px-3 py-2 rounded-md text-sm font-medium hover:opacity-90">전체보기</Link>
+              <Link to="/bride" className="px-3 py-2 rounded-md text-sm font-medium hover:opacity-90">신부한복</Link>
+              <Link to="/groom" className="px-3 py-2 rounded-md text-sm font-medium hover:opacity-90">신랑한복</Link>
+              <Link to="/guest" className="px-3 py-2 rounded-md text-sm font-medium hover:opacity-90">하객한복</Link>
+              <Link to="/parent" className="px-3 py-2 rounded-md text-sm font-medium hover:opacity-90">혼주한복</Link>
+            </div>
+
+            
+            
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 bg-teal-900/95 z-40 flex flex-col items-center justify-center md:hidden">
+      {/* Mobile Menu Container */}
+      <div
+        className={`fixed inset-0 z-40 md:hidden transition-opacity ease-in-out duration-300 
+                    ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+      >
+        {/* Overlay for closing menu on outside click */}
+        <div className="absolute inset-0 bg-black/50" onClick={toggleMobileMenu}></div>
+
+        {/* Mobile Menu Sidebar */}
+        <div
+          className={`relative w-[70vw] h-full bg-teal-900 z-50 
+                      transform transition-transform ease-in-out duration-300 
+                      ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        >
           <button onClick={toggleMobileMenu} className="absolute top-4 right-4 text-white text-3xl">&times;</button>
-          <Link to="/gallery" onClick={handleMobileLinkClick} className="text-white text-2xl my-4">전체보기</Link>
-          <Link to="/bride" onClick={handleMobileLinkClick} className="text-white text-2xl my-4">신부한복</Link>
-          <Link to="/groom" onClick={handleMobileLinkClick} className="text-white text-2xl my-4">신랑한복</Link>
-          <Link to="/guest" onClick={handleMobileLinkClick} className="text-white text-2xl my-4">하객한복</Link>
-          <Link to="/parent" onClick={handleMobileLinkClick} className="text-white text-2xl my-4">혼주한복</Link>
+          <div className="flex flex-col items-center justify-center h-full py-16">
+            <Link to="/gallery" onClick={handleMobileLinkClick} className="text-white text-2xl my-4">전체보기</Link>
+            <Link to="/bride" onClick={handleMobileLinkClick} className="text-white text-2xl my-4">신부한복</Link>
+            <Link to="/groom" onClick={handleMobileLinkClick} className="text-white text-2xl my-4">신랑한복</Link>
+            <Link to="/guest" onClick={handleMobileLinkClick} className="text-white text-2xl my-4">하객한복</Link>
+            <Link to="/parent" onClick={handleMobileLinkClick} className="text-white text-2xl my-4">혼주한복</Link>
+          </div>
         </div>
-      )}
+      </div>
     </>
   );
 }
